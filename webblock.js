@@ -11,10 +11,10 @@ function WebBlock(data) {
     var _self = this;
 
     this.content = [];
-    for(var i = 0; i < this.childNodes.length; i++){
-      this.content.push(this.childNodes[i]);
+    for (var j = 0; j < this.childNodes.length; j++) {
+      this.content.push(this.childNodes[j]);
     }
-    this.innerHTML = ""
+    this.innerHTML = '';
 
     this.__component__ = React.createClass({
       mixins: [React.addons.PureRenderMixin],
@@ -43,8 +43,7 @@ function WebBlock(data) {
         var attrValue = this.getAttribute(i);
         if (typeof def === 'object' && attrValue === null && def.defaultValue !== undefined) {
           this.__props__[i] = def.defaultValue;
-        }
-        else {
+        } else {
           this.__updateAttribute__(i, attrValue);
         }
         createProperty.call(this, i);
@@ -55,19 +54,19 @@ function WebBlock(data) {
       data.createdCallback.apply(this, arguments);
     }
   };
-  GenericComponent.prototype.bindContent = function(ref){
-    if(ref!==null){
-      ref.innerHTML = ""
-      this.content.forEach(function(x){
+  GenericComponent.prototype.bindContent = function (ref) {
+    if (ref !== null) {
+      ref.innerHTML = '';
+      this.content.forEach(function (x) {
         ref.appendChild(x);
-      })
+      });
     }
-  }
-  GenericComponent.prototype.bindProperty = function(ref,target,val){
-    if(ref!==null){
+  };
+  GenericComponent.prototype.bindProperty = function (ref, target, val) {
+    if (ref !== null) {
       ref[target] = val;
     }
-  }
+  };
   GenericComponent.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
     if (attributes[attrName] === undefined) {
       return;
@@ -79,7 +78,7 @@ function WebBlock(data) {
     }
   };
   GenericComponent.prototype.attachedCallback = function () {
-    if(this.__is_attached__===false){
+    if (this.__is_attached__ === false) {
       this.__is_attached__ = true;
       this.__render__();
     }
@@ -88,7 +87,7 @@ function WebBlock(data) {
     }
   };
   GenericComponent.prototype.detachedCallback = function () {
-    if(this.__is_attached__===true){
+    if (this.__is_attached__ === true) {
       this.__is_attached__ = false;
       ReactDOM.unmountComponentAtNode(this);
     }
@@ -111,9 +110,9 @@ function WebBlock(data) {
     if (def === Object || def === Array) {
       this.__props__[attrName] = JSON.parse(value);
     } else if (def === Number) {
-      this.__props__[attrName] = value===null?value:parseFloat(value);
+      this.__props__[attrName] = value === null ? value : parseFloat(value);
     } else if (def === Boolean) {
-      this.__props__[attrName] = value===null?value:value === 'true';
+      this.__props__[attrName] = value === null ? value : value === 'true';
     } else if (def === String) {
       this.__props__[attrName] = value;
     } else if (isFunction(def)) {
@@ -124,7 +123,7 @@ function WebBlock(data) {
     }
   };
   GenericComponent.prototype.__render__ = function () {
-    if(this.__is_attached__==false){return;}
+    if (this.__is_attached__ === false) {return;}
     var el = React.createElement(this.__component__, this.__props__);
     ReactDOM.render(el, this);
   };
