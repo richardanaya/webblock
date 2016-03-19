@@ -141,7 +141,51 @@ WebBlock({
 <my-greeting names='["John","Justin","Jacob"]'/>
 ```
 
-##Reuse Your Web Components Everywhere
+##Useful Helpers
+Easily add the original content to your new rendered content
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    return <div>Hello <span ref={(x)=>this.bindContent(x)}></span>!</div>
+  }
+});
+```
+```html
+<my-greeting>John</my-greeting>
+```
+> Note: You can always access the origin dom children at **this.children**
+
+Pass along properties from one web component to another
+
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    return <div>Hello {this.name}</div>
+  },
+  attributes: {
+    name: String
+  }
+});
+WebBlock({
+  tag: "my-greeting-list",
+  render: function(){
+    var children = this.names.map(function(x){
+      return <my-greeting ref={(ref)=>this.bindProperty(ref,"name",x)}/>
+    })
+    return <div>{children}</div>
+  },
+  attributes: {
+    names: Array
+  }
+});
+```
+```html
+<my-greeting-list names='["John","James","Justin"]'></my-greeting-list>
+```
+
+##Todo
 ```jsx
 WebBlock({
   tag: 'todo-item',
