@@ -42,9 +42,19 @@ function WebBlock(data) {
         var def = attributes[i];
         var attrValue = this.getAttribute(i);
         if (typeof def === 'object' && attrValue === null && def.defaultValue !== undefined) {
-          this.__props__[i] = def.defaultValue;
+          if(this[i]!=undefined){
+            this.__props__[i] = this[i];
+          }
+          else {
+            this.__props__[i] = def.defaultValue;
+          }
         } else {
-          this.__updateAttribute__(i, attrValue);
+          if(this[i]!=undefined){
+            this.__props__[i] = this[i];
+          }
+          else {
+            this.__updateAttribute__(i, attrValue);
+          }
         }
         createProperty.call(this, i);
       }

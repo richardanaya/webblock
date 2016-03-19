@@ -6,31 +6,28 @@
   <script src="https://cdn.rawgit.com/arqex/freezer/master/build/freezer.min.js"></script>
   <script src="webblock.js"></script>
   <script src="babel-browser.js"></script>
-  <script type="text/babel">
-  WebBlock({
-    tag: "my-greeting",
-    render: function(){
-      return <div>Hello {this.name}</div>
-    },
-    attributes: {
-      name: String
-    }
-  });
-  WebBlock({
-    tag: "my-greeting-list",
-    render: function(){
-      var children = this.names.map((x)=>{
-        return <my-greeting ref={(ref)=>this.bindProperty(ref,"name",x)}/>
-      })
-      return <div>{children}</div>
-    },
-    attributes: {
-      names: Array
-    }
-  });
-  </script>
+
 </head>
 <body>
-  <my-greeting-list names='["John","James","Justin"]'></my-greeting-list>
+  <my-greeting id="greet"/>
+  <script>
+    document.getElementById("greet").name = {first:"John",last:"Smith"};
+    setTimeout(function(){
+      document.getElementById("greet").name = {first:"Red",last:"Smith"};
+
+    },4000)
+  </script>
+  <script type="text/babel">
+  WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    if(!this.name) return <div>Hello World!</div>
+    return <div>Hello {this.name.first}</div>
+  },
+  attributes: {
+    name: Object
+  }
+});
+  </script>
 </body>
 </html>
