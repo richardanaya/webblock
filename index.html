@@ -8,14 +8,29 @@
   <script src="babel-browser.js"></script>
   <script type="text/babel">
   WebBlock({
-  tag: "my-greeting",
-  render: function(){
-    return <div>Hello <span ref={(x)=>this.bindContent(x)}></span>!</div>
-  }
-});
+    tag: "my-greeting",
+    render: function(){
+      return <div>Hello {this.name}</div>
+    },
+    attributes: {
+      name: String
+    }
+  });
+  WebBlock({
+    tag: "my-greeting-list",
+    render: function(){
+      var children = this.names.map((x)=>{
+        return <my-greeting ref={(ref)=>this.bindProperty(ref,"name",x)}/>
+      })
+      return <div>{children}</div>
+    },
+    attributes: {
+      names: Array
+    }
+  });
   </script>
 </head>
 <body>
-  <my-greeting>John</my-greeting>
+  <my-greeting-list names='["John","James","Justin"]'></my-greeting-list>
 </body>
 </html>

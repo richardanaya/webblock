@@ -63,9 +63,9 @@ function WebBlock(data) {
       })
     }
   }
-  GenericComponent.prototype.bindProperty = function(ref,to,from){
+  GenericComponent.prototype.bindProperty = function(ref,target,val){
     if(ref!==null){
-      ref[to] = this[from];
+      ref[target] = val;
     }
   }
   GenericComponent.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
