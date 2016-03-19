@@ -1,0 +1,21 @@
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.min.js"></script>
+  <script src="https://cdn.rawgit.com/arqex/freezer/master/build/freezer.min.js"></script>
+  <script src="webblock.js"></script>
+  <script src="babel-browser.js"></script>
+  <script type="text/babel">
+  WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    return <div>Hello <span ref={(x)=>this.bindContent(x)}></span>!</div>
+  }
+});
+  </script>
+</head>
+<body>
+  <my-greeting>John</my-greeting>
+</body>
+</html>
