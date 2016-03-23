@@ -17,24 +17,28 @@ function WebBlock(data) {
     this.innerHTML = '';
     this.shadowRoot = this.createShadowRoot();
 
-    //create style
-    if(typeof this.__style__ == "string"){
-      var el = document.createElement('style');
-      el.innerHTML = this.__style__;
-      this.shadowRoot.appendChild(el);
-    }
-    else if(Array.isArray(this.__style__)){
-      for(var k in this.__style__){
-        var cssURL = this.__style__[k];
-        var el = document.createElement('style');
-        el.innerHTML = '@import "' + cssURL + '"';
-        this.shadowRoot.appendChild(el);
-      }
-    }
-    this.mountPoint = document.createElement("div");
-    this.shadowRoot.appendChild(this.mountPoint);
-
     this.__component__ = React.createClass({
+      componentDidMount: function(){
+        var node = ReactDOM.findDOMNode(this);
+        var existingStyles = node.parentNode.querySelectorAll('style');
+        for(var l = 0; l<existingStyles.length;l++){
+          existingStyles[l].remove();
+        }
+        //create style
+        if(typeof _self.__style__ == "string"){
+          var el = document.createElement('style');
+          el.innerHTML = _self.__style__;
+          node.parentNode.appendChild(el);
+        }
+        else if(Array.isArray(_self.__style__)){
+          for(var k in _self.__style__){
+            var cssURL = _self.__style__[k];
+            var el = document.createElement('style');
+            el.innerHTML = '@import "' + cssURL + '"';
+            node.parentNode.appendChild(el);
+          }
+        }
+      },
       mixins: [React.addons.PureRenderMixin],
       render: function () {
         return data.render.call(_self, this);
@@ -130,7 +134,7 @@ function WebBlock(data) {
   GenericComponent.prototype.detachedCallback = function () {
     if (this.__is_attached__ === true) {
       this.__is_attached__ = false;
-      ReactDOM.unmountComponentAtNode(this.mountPoint);
+      ReactDOM.unmountComponentAtNode(this.shadowRoot);
     }
     if (this.__detachedCallback__) {
       this.__detachedCallback__.apply(this, arguments);
@@ -166,7 +170,7 @@ function WebBlock(data) {
   GenericComponent.prototype.__render__ = function () {
     if (this.__is_attached__ === false) {return;}
     var el = React.createElement(this.__component__, this.__props__);
-    ReactDOM.render(el, this.mountPoint);
+    ReactDOM.render(el, this.shadowRoot);
   };
 
   for (var i in data) {
