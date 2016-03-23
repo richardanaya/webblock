@@ -95,7 +95,7 @@ WebBlock({
 ```
 
 ##Observe changes
-Observe changes to the attributes/properties using observe() and unobserve()
+Observe changes to the attributes properties using observe() and unobserve()
 ```jsx
 WebBlock({
   tag: "my-greeting",

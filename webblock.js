@@ -15,6 +15,7 @@ function WebBlock(data) {
       this.content.push(this.childNodes[j]);
     }
     this.innerHTML = '';
+    this.shadowRoot = this.createShadowRoot();
 
     this.__component__ = React.createClass({
       mixins: [React.addons.PureRenderMixin],
@@ -112,7 +113,7 @@ function WebBlock(data) {
   GenericComponent.prototype.detachedCallback = function () {
     if (this.__is_attached__ === true) {
       this.__is_attached__ = false;
-      ReactDOM.unmountComponentAtNode(this);
+      ReactDOM.unmountComponentAtNode(this.shadowRoot);
     }
     if (this.__detachedCallback__) {
       this.__detachedCallback__.apply(this, arguments);
@@ -148,7 +149,7 @@ function WebBlock(data) {
   GenericComponent.prototype.__render__ = function () {
     if (this.__is_attached__ === false) {return;}
     var el = React.createElement(this.__component__, this.__props__);
-    ReactDOM.render(el, this);
+    ReactDOM.render(el, this.shadowRoot);
   };
 
   for (var i in data) {
