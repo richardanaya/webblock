@@ -1,32 +1,19 @@
 <html>
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.min.js"></script>
-  <script src="https://cdn.rawgit.com/arqex/freezer/master/build/freezer.min.js"></script>
-  <script src="webblock.js"></script>
-  <script src="babel-browser.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.js" async></script>
+  <link rel="import" href="test-component.html" async>
 </head>
 <body>
-  <my-greeting id="greet"/>
+  <my-greeting id="greet"></my-greeting>
   <script>
-    document.getElementById("greet").name = {first:"John",last:"Smith"};
-    setTimeout(function(){
-      document.getElementById("greet").name = {first:"Red",last:"Smith"};
+    window.addEventListener('WebComponentsReady', function(e) {
+      document.getElementById("greet").name = {first:"John",last:"Smith"};
+      debugger;
+      setTimeout(function(){
+        document.getElementById("greet").name = {first:"Red",last:"Smith"};
 
-    },4000)
-  </script>
-  <script type="text/babel">
-  WebBlock({
-  tag: "my-greeting",
-  render: function(){
-    if(!this.name) return <div>Hello World!</div>
-    return <div>Hello {this.name.first}</div>
-  },
-  attributes: {
-    name: Object
-  }
-});
+      },4000)
+    });
   </script>
 </body>
 </html>

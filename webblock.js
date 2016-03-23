@@ -24,11 +24,17 @@ function WebBlock(data) {
     });
 
     this.__props__ = {};
+    this.__prop_observers__ = {};
 
     function createProperty(propName) {
+      this.__prop_observers__[propName] = [];
       Object.defineProperty(this, propName, {
         set: function (x) {
+          var oldValue = this.__props__[propName];
           this.__props__[propName] = x;
+          this.__prop_observers__[propName].forEach(function(handler){
+            handler(x,oldValue,propName)
+          })
           this.__render__();
         },
         get: function () {
@@ -64,6 +70,13 @@ function WebBlock(data) {
       data.createdCallback.apply(this, arguments);
     }
   };
+  GenericComponent.prototype.observe = function (name,fn) {
+    this.__prop_observers__[name].push(fn);
+  }
+  GenericComponent.prototype.unobserve = function (name,fn) {
+    var index = this.__prop_observers__[name].indexOf(fn);
+    this.__prop_observers__[name].splice(index, 1);
+  }
   GenericComponent.prototype.bindContent = function (ref) {
     if (ref !== null) {
       ref.innerHTML = '';

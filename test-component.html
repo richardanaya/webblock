@@ -1,0 +1,14 @@
+<link rel="import" href="webblock.html">
+<script>
+WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    var r = React.createElement;
+    if(!this.name) return r("div",null,"Hello World!");
+    return r("div",null,["Hello "+this.name.first+"!",r("button",{onClick:(x)=>alert("blah")},"hey")]);
+  },
+  attributes: {
+    name: Object
+  }
+});
+</script>
