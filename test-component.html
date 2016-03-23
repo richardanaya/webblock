@@ -2,10 +2,11 @@
 <script>
 WebBlock({
   tag: "my-greeting",
+  style: ["test.css"],
   render: function(){
     var r = React.createElement;
-    if(!this.name) return r("div",null,"Hello World!");
-    return r("div",null,["Hello "+this.name.first+"!",r("button",{onClick:(x)=>alert("blah")},"hey")]);
+    if(!this.name) return r("div",null,null);
+    return r("div",{"className":"name"},["Hello "+this.name.first+"!",r("button",{onClick:(x)=>alert("blah")},"hey")]);
   },
   attributes: {
     name: Object

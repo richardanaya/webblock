@@ -147,6 +147,32 @@ WebBlock({
 <my-greeting/>
 ```
 
+## ShadowDOM and Styling
+By default your component exists in ShadowDOM, and is immune to css outside your component. You can easily define your components internal css:
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  style: ".greeting{ color: green}"
+  render: function(){
+    return <div className="greeting">Hello World!</div>
+  }
+});
+```
+Alternatively you can reference css urls that will be imported within your component:
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  style: ["greeting.css"]
+  render: function(){
+    return <div className="greeting">Hello World!</div>
+  }
+});
+```
+```html
+<my-greeting/>
+<div class="greeting">I won't be green because i'm not in the web component</div>
+```
+
 ##All the Expressiveness of JSX
 ```jsx
 WebBlock({

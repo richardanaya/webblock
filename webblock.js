@@ -17,6 +17,23 @@ function WebBlock(data) {
     this.innerHTML = '';
     this.shadowRoot = this.createShadowRoot();
 
+    //create style
+    if(typeof this.__style__ == "string"){
+      var el = document.createElement('style');
+      el.innerHTML = this.__style__;
+      this.shadowRoot.appendChild(el);
+    }
+    else if(Array.isArray(this.__style__)){
+      for(var k in this.__style__){
+        var cssURL = this.__style__[k];
+        var el = document.createElement('style');
+        el.innerHTML = '@import "' + cssURL + '"';
+        this.shadowRoot.appendChild(el);
+      }
+    }
+    this.mountPoint = document.createElement("div");
+    this.shadowRoot.appendChild(this.mountPoint);
+
     this.__component__ = React.createClass({
       mixins: [React.addons.PureRenderMixin],
       render: function () {
@@ -113,7 +130,7 @@ function WebBlock(data) {
   GenericComponent.prototype.detachedCallback = function () {
     if (this.__is_attached__ === true) {
       this.__is_attached__ = false;
-      ReactDOM.unmountComponentAtNode(this.shadowRoot);
+      ReactDOM.unmountComponentAtNode(this.mountPoint);
     }
     if (this.__detachedCallback__) {
       this.__detachedCallback__.apply(this, arguments);
@@ -149,7 +166,7 @@ function WebBlock(data) {
   GenericComponent.prototype.__render__ = function () {
     if (this.__is_attached__ === false) {return;}
     var el = React.createElement(this.__component__, this.__props__);
-    ReactDOM.render(el, this.shadowRoot);
+    ReactDOM.render(el, this.mountPoint);
   };
 
   for (var i in data) {
@@ -163,6 +180,10 @@ function WebBlock(data) {
     }
     if (i === 'detachedCallback') {
       GenericComponent.prototype.__detachedCallback__ = data[i];
+      continue;
+    }
+    if (i === 'style') {
+      GenericComponent.prototype.__style__ = data[i];
       continue;
     }
     if (i !== 'attributes' && i !== 'tag' && i !== 'render' && i !== 'createdCallback') {
