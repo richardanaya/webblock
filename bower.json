@@ -1,0 +1,15 @@
+{
+  "name": "webblock",
+  "description": "Make efficient and expressive web components with react",
+  "main": "webblock.js",
+  "authors": [
+    "Richard Anaya"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "component"
+  ],
+  "homepage": "https://github.com/richardanaya/webblock",
+  "moduleType": []
+}
