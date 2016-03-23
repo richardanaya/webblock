@@ -10,7 +10,6 @@ WebBlock({
     return <div>Hello World!</div>
   }
 });
-
 ```
 ```html
 <my-greeting/>
@@ -234,5 +233,23 @@ WebBlock({
 <todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
 ```
 [Checkout a working example on CodePen](http://codepen.io/ranaya/pen/WwpNxx?editors=1010)
+
+#Quickstart
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.min.js"></script>
+<script src="https://cdn.rawgit.com/richardanaya/webblock/master/webblock.js"></script>
+<script>
+WebBlock({
+  tag: "hello-world",
+  render: function(){
+    return React.createElement("div",null,"Hello World!")
+  }
+});
+</script>
+<hello-world/>
+```
 
 
