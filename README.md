@@ -94,6 +94,33 @@ WebBlock({
 </script>
 ```
 
+##Observe changes
+Observe changes to the attributes/properties using observe() and unobserve()
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    return <div>Hello {this.name}</div>
+  },
+  attributes: {
+    name: String
+  }
+});
+
+```
+```html
+<my-greeting id="greet"/>
+```
+```javascript
+var element = document.getElementById("greet");
+var watcher = function(value, oldValue, name){
+  console.log(name+" changed from" + oldValue+ " to " + newValue);
+};
+element.observe("name",watcher)
+element.name = "John";
+element.unobserve("name",watcher);
+```
+
 ##Access to Web Component Lifecycle
 ```jsx
 WebBlock({
@@ -251,5 +278,3 @@ WebBlock({
 </script>
 <hello-world/>
 ```
-
-
