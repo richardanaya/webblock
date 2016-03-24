@@ -298,13 +298,13 @@ WebBlock({
 #Quickstart
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
-<link rel="import" href="https://cdn.rawgit.com/richardanaya/webblock/master/webblock.html">
+<script src="https://rawgit.com/richardanaya/webblock/master/lib/webcomponents.min.js"></script>
+<link rel="import" href="https://rawgit.com/richardanaya/webblock/master/webblock.html">
 <script>
 WebBlock({
   tag: "hello-world",
   render: function(){
-    return "Hello World!"
+    return "Hello!"
   }
 });
 </script>
