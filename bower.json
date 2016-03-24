@@ -1,16 +1,20 @@
 {
   "name": "webblock",
   "description": "Make efficient and expressive web components with react",
-  "main": "webblock.js",
+  "main": "webblock.html",
   "authors": [
     "Richard Anaya"
   ],
   "license": "MIT",
   "keywords": [
-    "web",
-    "component"
+    "web-components",
+    "web-component"
   ],
   "homepage": "https://github.com/richardanaya/webblock",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/richardanaya/webblock"
+  },
   "moduleType": [],
   "dependencies": {
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
