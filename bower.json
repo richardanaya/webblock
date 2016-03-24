@@ -12,6 +12,9 @@
   ],
   "homepage": "https://github.com/richardanaya/webblock",
   "moduleType": [],
+  "dependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
