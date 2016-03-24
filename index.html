@@ -2,7 +2,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.min.js"></script>
 <link rel="import" href="./webblock.html">
-<todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
+<my-greeting/>
 <script>
 var ActionMixin = {
   action: function(type){
@@ -14,7 +14,7 @@ var ActionMixin = {
 }
 
 WebBlock({
-  tag: 'todo-list',
+  tag: 'my-greeting',
   mixins: [ActionMixin],
   render: function () {
     var _this = this;

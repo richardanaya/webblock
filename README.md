@@ -206,14 +206,14 @@ WebBlock({
 var ActionMixin = {
   action: function(type){
     var event = document.createEvent('Event');
-    event.initEvent('action', true, true);
+    event.initEvent('action's, true, true);
     event.details = type;
     this.dispatchEvent(event);
   }
 }
 
 WebBlock({
-  tag: 'todo-list',
+  tag: 'my-greeting',
   mixins: [ActionMixin],
   render: function () {
     var _this = this;
@@ -229,7 +229,9 @@ document.addEventListener("action",function(e){
   console.log(e);
 })
 ```
-
+```html
+<my-greeting/>
+```
 #Choose Your Own Virtual Dom
 By default web component uses no virtual dom. But you can choose between React and virtual-dom enabled web components.
 ##All the power of JSX
