@@ -328,7 +328,7 @@ WebBlock({
 #All the power of Polymer
 Polymer has a great collection of web components to use, by default they use what is called "shady dom" which is not compatible with ShadowDOM. To force polymer to use ShadowDOM (which will one day become the default!), use this block of code before Polymer is loaded on your page:
 
-```jsx
+```html
 <script>
     /* this script must run before Polymer is imported */
     window.Polymer = {
