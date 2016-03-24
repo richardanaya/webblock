@@ -207,12 +207,32 @@ WebBlock.React.prototype.render = function(){
 WebBlock.React.prototype.detach = function(){
   ReactDOM.unmountComponentAtNode(this.webComponent.shadowRoot);
 }
+WebBlock.VirtualDom = function(webComponent){
+  this.webComponent = webComponent;
+}
+WebBlock.VirtualDom.prototype.render = function(){
+  if(this.tree===undefined){
+    this.tree = this.webComponent.__componentRender__.call(this.webComponent);
+    this.rootNode = virtualDom.create(this.tree);
+    this.webComponent.shadowRoot.appendChild(this.rootNode);
+    this.webComponent.__injectStyles__();
+  }
+  else {
+    var newTree = this.webComponent.__componentRender__.call(this.webComponent);
+    var patches = virtualDom.diff(this.tree, newTree);
+    this.rootNode = virtualDom.patch(this.rootNode, patches);
+    this.tree = newTree;
+  }
+}
+WebBlock.VirtualDom.prototype.detach = function(){
 
+}
 WebBlock.Default = function(webComponent){
   this.webComponent = webComponent;
 }
 WebBlock.Default.prototype.render = function(){
   this.webComponent.shadowRoot.innerHTML = "";
+
   var result = this.webComponent.__componentRender__.call(this.webComponent);
   if(typeof result == "string"){
     this.webComponent.shadowRoot.innerHTML

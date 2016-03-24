@@ -1,13 +1,16 @@
+<script src="./lib/virtual-dom.js"></script>
 <link rel="import" href="./webblock.html">
 <script>
 WebBlock({
   tag: "my-greeting",
+  virtualDom: WebBlock.VirtualDom,
   style: ".name { color: blue}",
   render: function(){
-    var el = document.createElement("div")
-    el.className = "name"
-    el.innerHTML = this.content[0].textContent
-    return el;
+    var h = virtualDom.h;
+    return h('div',{className:"name"},["Hello "+this.name+"!"]);
+  },
+  attributes: {
+    name:String
   }
 });
 </script>

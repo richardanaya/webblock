@@ -224,6 +224,24 @@ WebBlock({
 ```html
 <my-greeting names='["John","Justin","Jacob"]'/>
 ```
+##All the power of virtual-dom
+This is an extremely minimalistic virtual-dom project.
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  virtualDom: WebBlock.VirtualDom,
+  style: ".name { color: blue}",
+  render: function(){
+    return h('div',{className:"name"},["Hello "+this.name+"!"]);
+  },
+  attributes: {
+    name:String
+  }
+});
+```
+```html
+<my-greeting names="Sam"/>
+```
 
 ##Todo
 ```jsx

@@ -1,10 +1,15 @@
 <html>
 <head>
-  <script src="webcomponents.min.js" async></script>
-  <link rel="import" href="test-component.html" async>
+  <script src="./lib/webcomponents.min.js" async></script>
+  <link rel="import" href="./test-component.html" async>
 </head>
 <body>
-  <my-greeting id="greet">Sam</my-greeting>
+  <my-greeting id="greet" name="Sam"></my-greeting>
   <div class="name">i'm not blue</div>
+  <script>
+  setTimeout(function(){
+    document.getElementById("greet").name = "Ryan";
+  },4000)
+  </script>
 </body>
 </html>
