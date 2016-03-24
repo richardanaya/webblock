@@ -299,9 +299,7 @@ WebBlock({
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.min.js"></script>
-<script src="https://cdn.rawgit.com/richardanaya/webblock/master/webblock.js"></script>
+<link rel="import" href="https://cdn.rawgit.com/richardanaya/webblock/master/webblock.html">
 <script>
 WebBlock({
   tag: "hello-world",
