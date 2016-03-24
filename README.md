@@ -235,15 +235,36 @@ document.addEventListener("action",function(e){
 #Choose Your Own Virtual Dom
 By default web component uses no virtual dom. But you can choose between React and virtual-dom enabled web components.
 ##All the power of JSX
+We can return JSX as our render and WebBlock will neatly merge it into our virtual dom. Notice how there are no props, instead, you can simply just build your JSX using the web component's properties itself. So easy!
+
+If you have child web components. Use JSX's ref ( https://facebook.github.io/react/docs/more-about-refs.html ) to get access to the node when it's mounted. This is very useful for storing references to inputs and accessing the direct properties/functions of our child web components.
+
 ```jsx
 WebBlock({
   tag: "my-greeting",
   virtualDom: WebBlock.React,
   render: function(){
+    return <div>Hello {this.name.first}</div>
+  },
+  attributes: {
+    name: Object
+  }
+});
+
+WebBlock({
+  tag: "my-greeting-list",
+  virtualDom: WebBlock.React,
+  render: function(){
+    debugger;
+    if(this.names==undefined)return <div></div>
     var children = this.names.map(function(x){
-      return <div>{x}</div>
+      function setName(ref){
+        //set the property directly on the dom node
+        ref.name = x;
+      }
+      return <my-greeting ref={setName}></my-greeting>
     })
-    return <div>Hello Everyone!:{children}</div>
+    return <div>{children}</div>
   },
   attributes: {
     names: Array
@@ -252,7 +273,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting names='["John","Justin","Jacob"]'/>
+<my-greeting-list names='[{"first":"John","last":"Smith"},{"first":"Justin","last":"Smith"}]'/>
 ```
 ##All the power of virtual-dom
 This is an extremely minimalistic virtual-dom project.
@@ -272,58 +293,6 @@ WebBlock({
 ```html
 <my-greeting names="Sam"/>
 ```
-
-##Todo
-```jsx
-WebBlock({
-  tag: 'todo-item',
-  virtualDom: WebBlock.React,
-  render: function () {
-    var divStyle = {};
-    if (this.complete) {
-      divStyle.textDecoration = 'line-through';
-    }
-    return <div style={divStyle}>
-          <input type="checkbox"
-            ref={(x) => this.checkBox = x}
-            checked={this.complete}
-            onChange={(x) => this.onCheckChanged()} />
-          {this.task}
-    </div>;
-  },
-  onCheckChanged() {
-    this.complete = this.checkBox.checked;
-  },
-  attributes: {
-    task: String,
-    complete: {
-      type: Boolean,
-      defaultValue: false
-    }
-  }
-});
-
-WebBlock({
-  tag: 'todo-list',
-  virtualDom: WebBlock.React,
-  render: function () {
-    var children = this.tasks.map(function (x) {
-      return <todo-item task={x} />;
-    });
-    return <div>TODO LIST{children}</div>;
-  },
-  attributes: {
-    tasks:{
-      type:Array,
-      defaultValue: []
-    }
-  }
-});
-```
-```html
-<todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
-```
-[Checkout a working example on CodePen](http://codepen.io/ranaya/pen/WwpNxx?editors=1010)
 
 #All the power of Polymer
 Polymer has a great collection of web components to use, by default they use what is called "shady dom" which is not compatible with ShadowDOM. To force polymer to use ShadowDOM (which will one day become the default!), use this block of code before Polymer is loaded on your page:
@@ -391,3 +360,59 @@ WebBlock({
 </script>
 <hello-world/>
 ```
+
+#Todo
+Let's look at how we'd make todo
+```jsx
+WebBlock({
+  tag: 'todo-item',
+  virtualDom: WebBlock.React,
+  render: function () {
+    var divStyle = {};
+    if (this.complete) {
+      divStyle.textDecoration = 'line-through';
+    }
+    return <div style={divStyle}>
+          <input type="checkbox"
+            ref={(x) => this.checkBox = x}
+            checked={this.complete}
+            onChange={(x) => this.onCheckChanged()} />
+          {this.task}
+    </div>;
+  },
+  onCheckChanged() {
+    this.complete = this.checkBox.checked;
+  },
+  attributes: {
+    task: String,
+    complete: {
+      type: Boolean,
+      defaultValue: false
+    }
+  }
+});
+
+WebBlock({
+  tag: 'todo-list',
+  virtualDom: WebBlock.React,
+  render: function () {
+    var children = this.tasks.map(function (x) {
+      return <todo-item task={x} />;
+    });
+    return <div>TODO LIST{children}</div>;
+  },
+  attributes: {
+    tasks:{
+      type:Array,
+      defaultValue: []
+    }
+  }
+});
+```
+```html
+<todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
+```
+[Checkout a working example on CodePen](http://codepen.io/ranaya/pen/WwpNxx?editors=1010)
+
+#Flux/Redux
+Let's look how we can use popular unidirection data architecture with web components made with web block:
