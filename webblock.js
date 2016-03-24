@@ -3,7 +3,7 @@ function WebBlock(data) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
   };
-  var virtualDomClass = data.virtualDom||WebBlock.React;
+  var virtualDomClass = data.virtualDom||WebBlock.Default;
   var GenericComponent = function () {};
   GenericComponent.prototype = Object.create(HTMLElement.prototype);
   GenericComponent.prototype.createdCallback = function () {
@@ -217,4 +217,15 @@ WebBlock.React.prototype.render = function(){
 }
 WebBlock.React.prototype.detach = function(){
   ReactDOM.unmountComponentAtNode(this.webComponent.shadowRoot);
+}
+
+WebBlock.Default = function(webComponent){
+  this.webComponent = webComponent;
+}
+WebBlock.Default.prototype.render = function(){
+  this.webComponent.shadowRoot.innerHTML = this.webComponent.__componentRender__.call(this.webComponent)
+  this.webComponent.__injectStyles__();
+}
+WebBlock.Default.prototype.detach = function(){
+
 }

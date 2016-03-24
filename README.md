@@ -1,13 +1,13 @@
 # WebBlock.js
 
-Create expressive and powerful web components with React
+Create expressive and powerful web components with virtual dom
 
 ## Simple Web Component Definition
 ```jsx
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    return <div>Hello World!</div>
+    return "<div>Hello World!</div>";
   }
 });
 ```
@@ -20,7 +20,7 @@ Define attributes that give your web component data from outside world
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    return <div>Hello {this.name}</div>
+    return "<div>Hello "+this.name+"</div>";
   },
   attributes: {
     name: String
@@ -38,7 +38,7 @@ WebBlock supports complex types for your attributes
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    return <div>Hello {this.name.first}</div>
+    return "<div>Hello "+this.name.first+"</div>";
   },
   attributes: {
     name: Object
@@ -56,7 +56,7 @@ Create your own converter to use whatever format you like
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    return <div>Hello {this.name[0]}</div>
+    return "<div>Hello "+this.name[0]+"</div>";
   },
   attributes: {
     name: function(val){
@@ -76,8 +76,8 @@ Attribute string conversion, while useful, can be very slow. For every attribute
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    if(!this.name) return <div>Hello World!</div>
-    return <div>Hello {this.name.first}</div>
+    if(!this.name) return "<div>Hello World!</div>""
+    return "<div>Hello "+this.name.first+"</div>";
   },
   attributes: {
     name: function(val){
@@ -89,9 +89,9 @@ WebBlock({
 ```
 ```html
 <my-greeting id="greet"/>
-<script>
-  document.getElementById("greet").name = {first:"John",last:"Smith"};
-</script>
+```
+```javascript
+document.getElementById("greet").name = {first:"John",last:"Smith"};
 ```
 
 ##Observe changes
@@ -100,7 +100,7 @@ Observe changes to the attributes properties using observe() and unobserve()
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    return <div>Hello {this.name}</div>
+    return "<div>Hello "+this.name+"</div>";
   },
   attributes: {
     name: String
@@ -126,7 +126,7 @@ element.unobserve("name",watcher);
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    return <div>Hello World!</div>
+    return "<div>Hello World!</div>"
   },
   createdCallback: function(){
     console.log("Element instantiated")
@@ -154,7 +154,7 @@ WebBlock({
   tag: "my-greeting",
   style: ".greeting{ color: green}"
   render: function(){
-    return <div className="greeting">Hello World!</div>
+    return '<div className="greeting">Hello World!</div>'
   }
 });
 ```
@@ -164,7 +164,7 @@ WebBlock({
   tag: "my-greeting",
   style: ["greeting.css"]
   render: function(){
-    return <div className="greeting">Hello World!</div>
+    return '<div className="greeting">Hello World!</div>'
   }
 });
 ```
@@ -173,10 +173,12 @@ WebBlock({
 <div class="greeting">I won't be green because i'm not in the web component</div>
 ```
 
-##All the Expressiveness of JSX
+#Choose Your Own Virtual Dom
+##All the power of JSX
 ```jsx
 WebBlock({
   tag: "my-greeting",
+  virtualDom: WebBlock.React,
   render: function(){
     var children = this.names.map(function(x){
       return <div>{x}</div>

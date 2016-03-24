@@ -2,10 +2,11 @@
 <script>
 WebBlock({
   tag: "my-greeting",
+  virtualDom: WebBlock.React,
   style: ".name { color: blue}",
   render: function(){
     var r = React.createElement;
-    if(!this.name) return r("div",null,null);
+    if(!this.name) return "";
     return r("div",{"className":"name"},["Hello "+this.name.first+"!",r("button",{onClick:(x)=>alert("blah")},"hey")]);
   },
   attributes: {
