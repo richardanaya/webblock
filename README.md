@@ -306,7 +306,7 @@ WebBlock({
 WebBlock({
   tag: "hello-world",
   render: function(){
-    return React.createElement("div",null,"Hello World!")
+    return "Hello World!"
   }
 });
 </script>
