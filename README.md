@@ -340,6 +340,42 @@ Polymer has a great collection of web components to use, by default they use wha
 
 Look for new components at https://customelements.io/
 
+##Getting started with polymer
+
+```bash
+npm install -g bower
+bower install webblock
+bower install paper-button
+```
+
+```html
+<script>
+    /* this script must run before Polymer is imported */
+    window.Polymer = {
+      dom: 'shadow',
+      lazyRegister: true
+    };
+</script>
+<script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+<link rel="import" href="bower_components/font-roboto/roboto.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/webblock/webblock.html">
+<style>
+body {
+  font-family: roboto;
+}
+</style>
+<script>
+WebBlock({
+  tag: "hello-world",
+  render: function(){
+    return "<paper-styles><paper-button raised>Hello World</paper-button>"
+  }
+});
+</script>
+<hello-world></hello-world>
+```
+
 #Quickstart
 
 ```html
