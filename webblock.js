@@ -143,6 +143,26 @@ function WebBlock(data) {
     if (this.__is_attached__ === false) {return;}
     this.__virtualDom__.render();
   };
+  GenericComponent.prototype.__injectStyles__ = function(){
+    var existingStyles = this.shadowRoot.querySelectorAll('style');
+    for(var l = 0; l<existingStyles.length;l++){
+      existingStyles[l].remove();
+    }
+    //create style
+    if(typeof this.__style__ == "string"){
+      var el = document.createElement('style');
+      el.innerHTML = this.__style__;
+      this.shadowRoot.appendChild(el);
+    }
+    else if(Array.isArray(this.__style__)){
+      for(var k in this.__style__){
+        var cssURL = this.__style__[k];
+        var el = document.createElement('style');
+        el.innerHTML = '@import "' + cssURL + '"';
+        this.shadowRoot.appendChild(el);
+      }
+    }
+  }
 
   for (var i in data) {
     if (i === 'createdCallback') {
@@ -183,25 +203,7 @@ WebBlock.React = function(webComponent){
   this.webComponent = webComponent;
   this.reactComponent = React.createClass({
     componentDidMount: function(){
-      var node = ReactDOM.findDOMNode(this);
-      var existingStyles = node.parentNode.querySelectorAll('style');
-      for(var l = 0; l<existingStyles.length;l++){
-        existingStyles[l].remove();
-      }
-      //create style
-      if(typeof webComponent.__style__ == "string"){
-        var el = document.createElement('style');
-        el.innerHTML = webComponent.__style__;
-        node.parentNode.appendChild(el);
-      }
-      else if(Array.isArray(webComponent.__style__)){
-        for(var k in webComponent.__style__){
-          var cssURL = webComponent.__style__[k];
-          var el = document.createElement('style');
-          el.innerHTML = '@import "' + cssURL + '"';
-          node.parentNode.appendChild(el);
-        }
-      }
+      webComponent.__injectStyles__();
     },
     mixins: [React.addons.PureRenderMixin],
     render: function () {
