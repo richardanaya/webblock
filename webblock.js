@@ -3,7 +3,7 @@ function WebBlock(data) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
   };
-  var attributes = data.attributes;
+  var virtualDomClass = data.virtualDom||WebBlock.React;
   var GenericComponent = function () {};
   GenericComponent.prototype = Object.create(HTMLElement.prototype);
   GenericComponent.prototype.createdCallback = function () {
@@ -16,35 +16,7 @@ function WebBlock(data) {
     }
     this.innerHTML = '';
     this.shadowRoot = this.createShadowRoot();
-
-    this.__component__ = React.createClass({
-      componentDidMount: function(){
-        var node = ReactDOM.findDOMNode(this);
-        var existingStyles = node.parentNode.querySelectorAll('style');
-        for(var l = 0; l<existingStyles.length;l++){
-          existingStyles[l].remove();
-        }
-        //create style
-        if(typeof _self.__style__ == "string"){
-          var el = document.createElement('style');
-          el.innerHTML = _self.__style__;
-          node.parentNode.appendChild(el);
-        }
-        else if(Array.isArray(_self.__style__)){
-          for(var k in _self.__style__){
-            var cssURL = _self.__style__[k];
-            var el = document.createElement('style');
-            el.innerHTML = '@import "' + cssURL + '"';
-            node.parentNode.appendChild(el);
-          }
-        }
-      },
-      mixins: [React.addons.PureRenderMixin],
-      render: function () {
-        return data.render.call(_self, this);
-      }
-    });
-
+    this.__virtualDom__ = new virtualDomClass(this);
     this.__props__ = {};
     this.__prop_observers__ = {};
 
@@ -65,9 +37,9 @@ function WebBlock(data) {
       });
     }
 
-    for (var i in attributes) {
-      if ({}.hasOwnProperty.call(attributes, i)) {
-        var def = attributes[i];
+    for (var i in this.__attributeDefinitions__) {
+      if ({}.hasOwnProperty.call(this.__attributeDefinitions__, i)) {
+        var def = this.__attributeDefinitions__[i];
         var attrValue = this.getAttribute(i);
         if (typeof def === 'object' && attrValue === null && def.defaultValue !== undefined) {
           if(this[i]!=undefined){
@@ -88,8 +60,8 @@ function WebBlock(data) {
       }
     }
 
-    if (data.createdCallback) {
-      data.createdCallback.apply(this, arguments);
+    if (this.__createdCallback__) {
+      this.__createdCallback__.apply(this, arguments);
     }
   };
   GenericComponent.prototype.observe = function (name,fn) {
@@ -113,7 +85,7 @@ function WebBlock(data) {
     }
   };
   GenericComponent.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
-    if (attributes[attrName] === undefined) {
+    if (this.__attributeDefinitions__[attrName] === undefined) {
       return;
     }
     this.__updateAttribute__(attrName, newVal);
@@ -134,14 +106,14 @@ function WebBlock(data) {
   GenericComponent.prototype.detachedCallback = function () {
     if (this.__is_attached__ === true) {
       this.__is_attached__ = false;
-      ReactDOM.unmountComponentAtNode(this.shadowRoot);
+      this.__virtualDom__.detach();
     }
     if (this.__detachedCallback__) {
       this.__detachedCallback__.apply(this, arguments);
     }
   };
   GenericComponent.prototype.__updateAttribute__ = function (attrName, value) {
-    var def = attributes[attrName];
+    var def = this.__attributeDefinitions__[attrName];
 
     if (typeof def === 'object') {
       if (def.type) {
@@ -169,11 +141,14 @@ function WebBlock(data) {
   };
   GenericComponent.prototype.__render__ = function () {
     if (this.__is_attached__ === false) {return;}
-    var el = React.createElement(this.__component__, this.__props__);
-    ReactDOM.render(el, this.shadowRoot);
+    this.__virtualDom__.render();
   };
 
   for (var i in data) {
+    if (i === 'createdCallback') {
+      GenericComponent.prototype.__createdCallback__ = data[i];
+      continue;
+    }
     if (i === 'attributeChangedCallback') {
       GenericComponent.prototype.__attributeChangedCallback__ = data[i];
       continue;
@@ -190,10 +165,54 @@ function WebBlock(data) {
       GenericComponent.prototype.__style__ = data[i];
       continue;
     }
-    if (i !== 'attributes' && i !== 'tag' && i !== 'render' && i !== 'createdCallback') {
-      GenericComponent.prototype[i] = data[i];
+    if (i === 'render') {
+      GenericComponent.prototype.__componentRender__ = data[i];
+      continue;
     }
+    if (i === 'attributes') {
+      GenericComponent.prototype.__attributeDefinitions__ = data[i];
+      continue;
+    }
+    GenericComponent.prototype[i] = data[i];
   }
   document.registerElement(data.tag, GenericComponent);
   return GenericComponent;
+}
+
+WebBlock.React = function(webComponent){
+  this.webComponent = webComponent;
+  this.reactComponent = React.createClass({
+    componentDidMount: function(){
+      var node = ReactDOM.findDOMNode(this);
+      var existingStyles = node.parentNode.querySelectorAll('style');
+      for(var l = 0; l<existingStyles.length;l++){
+        existingStyles[l].remove();
+      }
+      //create style
+      if(typeof webComponent.__style__ == "string"){
+        var el = document.createElement('style');
+        el.innerHTML = webComponent.__style__;
+        node.parentNode.appendChild(el);
+      }
+      else if(Array.isArray(webComponent.__style__)){
+        for(var k in webComponent.__style__){
+          var cssURL = webComponent.__style__[k];
+          var el = document.createElement('style');
+          el.innerHTML = '@import "' + cssURL + '"';
+          node.parentNode.appendChild(el);
+        }
+      }
+    },
+    mixins: [React.addons.PureRenderMixin],
+    render: function () {
+      return webComponent.__componentRender__.call(webComponent, this);
+    }
+  });
+}
+WebBlock.React.prototype.render = function(){
+  var el = React.createElement(this.reactComponent, this.webComponent.__props__);
+  ReactDOM.render(el, this.webComponent.shadowRoot);
+}
+WebBlock.React.prototype.detach = function(){
+  ReactDOM.unmountComponentAtNode(this.webComponent.shadowRoot);
 }
