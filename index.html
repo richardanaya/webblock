@@ -4,16 +4,7 @@
   <link rel="import" href="test-component.html" async>
 </head>
 <body>
-  <my-greeting id="greet"></my-greeting>
+  <my-greeting id="greet">Sam</my-greeting>
   <div class="name">i'm not blue</div>
-  <script>
-    window.addEventListener('WebComponentsReady', function(e) {
-      document.getElementById("greet").name = {first:"John",last:"Smith"};
-      setTimeout(function(){
-        document.getElementById("greet").name = {first:"Red",last:"Smith"};
-        document.getElementById("greet").name = document.getElementById("greet").name;
-      },4000)
-    });
-  </script>
 </body>
 </html>

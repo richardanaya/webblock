@@ -3,11 +3,23 @@
 Create expressive and powerful web components with virtual dom
 
 ## Simple Web Component Definition
+By default you can use string or HTMLElement. Look down below for how to use your virtual dom technology of choice.
 ```jsx
 WebBlock({
   tag: "my-greeting",
   render: function(){
     return "<div>Hello World!</div>";
+  }
+});
+```
+or
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  render: function(){
+    var el = document.createElement("div")
+    el.innerHTML = "Hello World!"
+    return el;
   }
 });
 ```
@@ -172,6 +184,23 @@ WebBlock({
 <my-greeting/>
 <div class="greeting">I won't be green because i'm not in the web component</div>
 ```
+##Access the original content of the Web Component
+Some people use the inside of a web component for data or configuration, you have access to this to use however you want once a web component is resolved:
+```jsx
+WebBlock({
+  tag: "my-greeting",
+  style: ".name { color: blue}",
+  render: function(){
+    var el = document.createElement("div")
+    el.className = "name"
+    el.innerHTML = "Hello "+this.content[0].textContent
+    return el;
+  }
+});
+```
+```html
+<my-greeting>Sam</my-greeting>
+```
 
 #Choose Your Own Virtual Dom
 By default web component uses no virtual dom. But you can choose between React and virtual-dom enabled web components.
@@ -194,53 +223,6 @@ WebBlock({
 ```
 ```html
 <my-greeting names='["John","Justin","Jacob"]'/>
-```
-
-##Useful Helpers
-Easily add the original content to your new rendered content
-```jsx
-WebBlock({
-  tag: "my-greeting",
-  virtualDom: WebBlock.React,
-  render: function(){
-    return <div>Hello <span ref={(x)=>this.bindContent(x)}></span>!</div>
-  }
-});
-```
-```html
-<my-greeting>John</my-greeting>
-```
-> Note: You can always access the origin dom children at **this.children**
-
-Pass along properties from one web component to another
-
-```jsx
-WebBlock({
-  tag: "my-greeting",
-  virtualDom: WebBlock.React,
-  render: function(){
-    return <div>Hello {this.name}</div>
-  },
-  attributes: {
-    name: String
-  }
-});
-WebBlock({
-  tag: "my-greeting-list",
-  virtualDom: WebBlock.React,
-  render: function(){
-    var children = this.names.map(function(x){
-      return <my-greeting ref={(ref)=>this.bindProperty(ref,"name",x)}/>
-    })
-    return <div>{children}</div>
-  },
-  attributes: {
-    names: Array
-  }
-});
-```
-```html
-<my-greeting-list names='["John","James","Justin"]'></my-greeting-list>
 ```
 
 ##Todo

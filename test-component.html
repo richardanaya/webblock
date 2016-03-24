@@ -6,11 +6,8 @@ WebBlock({
   render: function(){
     var el = document.createElement("div")
     el.className = "name"
-    el.innerHTML = "Goodbye "+this.name.first;
+    el.innerHTML = this.content[0].textContent
     return el;
-  },
-  attributes: {
-    name: Object
   }
 });
 </script>

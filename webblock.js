@@ -74,19 +74,6 @@ function WebBlock(data) {
     var index = this.__prop_observers__[name].indexOf(fn);
     this.__prop_observers__[name].splice(index, 1);
   }
-  GenericComponent.prototype.bindContent = function (ref) {
-    if (ref !== null) {
-      ref.innerHTML = '';
-      this.content.forEach(function (x) {
-        ref.appendChild(x);
-      });
-    }
-  };
-  GenericComponent.prototype.bindProperty = function (ref, target, val) {
-    if (ref !== null) {
-      ref[target] = val;
-    }
-  };
   GenericComponent.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
     if (this.__attributeDefinitions__[attrName] === undefined) {
       return;
