@@ -11,5 +11,14 @@
     "component"
   ],
   "homepage": "https://github.com/richardanaya/webblock",
-  "moduleType": []
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "tests",
+    "webblock.png",
+    "package.json"
+  ]
 }
