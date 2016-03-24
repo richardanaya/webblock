@@ -201,6 +201,7 @@ Easily add the original content to your new rendered content
 ```jsx
 WebBlock({
   tag: "my-greeting",
+  virtualDom: WebBlock.React,
   render: function(){
     return <div>Hello <span ref={(x)=>this.bindContent(x)}></span>!</div>
   }
@@ -216,6 +217,7 @@ Pass along properties from one web component to another
 ```jsx
 WebBlock({
   tag: "my-greeting",
+  virtualDom: WebBlock.React,
   render: function(){
     return <div>Hello {this.name}</div>
   },
@@ -225,6 +227,7 @@ WebBlock({
 });
 WebBlock({
   tag: "my-greeting-list",
+  virtualDom: WebBlock.React,
   render: function(){
     var children = this.names.map(function(x){
       return <my-greeting ref={(ref)=>this.bindProperty(ref,"name",x)}/>
@@ -244,6 +247,7 @@ WebBlock({
 ```jsx
 WebBlock({
   tag: 'todo-item',
+  virtualDom: WebBlock.React,
   render: function () {
     var divStyle = {};
     if (this.complete) {
@@ -271,6 +275,7 @@ WebBlock({
 
 WebBlock({
   tag: 'todo-list',
+  virtualDom: WebBlock.React,
   render: function () {
     var children = this.tasks.map(function (x) {
       return <todo-item task={x} />;
