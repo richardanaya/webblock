@@ -235,7 +235,7 @@ WebBlock.Default.prototype.render = function(){
 
   var result = this.webComponent.__componentRender__.call(this.webComponent);
   if(typeof result == "string"){
-    this.webComponent.shadowRoot.innerHTML
+    this.webComponent.shadowRoot.innerHTML = result;
   }
   else {
     this.webComponent.shadowRoot.appendChild(result);
