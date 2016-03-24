@@ -31,7 +31,7 @@ function WebBlock(data) {
             this.__prop_observers__[propName].forEach(function(handler){
               handler(x,oldValue,propName)
             })
-            this.__render__();
+            this.__componentRender__();
           }
         },
         get: function () {
@@ -40,9 +40,9 @@ function WebBlock(data) {
       });
     }
 
-    for (var i in this.__attributeDefinitions__) {
-      if ({}.hasOwnProperty.call(this.__attributeDefinitions__, i)) {
-        var def = this.__attributeDefinitions__[i];
+    for (var i in this.__attributes__) {
+      if ({}.hasOwnProperty.call(this.__attributes__, i)) {
+        var def = this.__attributes__[i];
         var attrValue = this.getAttribute(i);
         if (typeof def === 'object' && attrValue === null && def.defaultValue !== undefined) {
           if(this[i]!=undefined){
@@ -75,11 +75,11 @@ function WebBlock(data) {
     this.__prop_observers__[name].splice(index, 1);
   }
   GenericComponent.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
-    if (this.__attributeDefinitions__[attrName] === undefined) {
+    if (this.__attributes__[attrName] === undefined) {
       return;
     }
     this.__updateAttribute__(attrName, newVal);
-    this.__render__();
+    this.__componentRender__();
     if (this.__attributeChangedCallback__) {
       this.__attributeChangedCallback__.apply(this, arguments);
     }
@@ -87,7 +87,7 @@ function WebBlock(data) {
   GenericComponent.prototype.attachedCallback = function () {
     if (this.__is_attached__ === false) {
       this.__is_attached__ = true;
-      this.__render__();
+      this.__componentRender__();
     }
     if (this.__attachedCallback__) {
       this.__attachedCallback__.apply(this, arguments);
@@ -103,7 +103,7 @@ function WebBlock(data) {
     }
   };
   GenericComponent.prototype.__updateAttribute__ = function (attrName, value) {
-    var def = this.__attributeDefinitions__[attrName];
+    var def = this.__attributes__[attrName];
 
     if (typeof def === 'object') {
       if (def.type) {
@@ -129,7 +129,7 @@ function WebBlock(data) {
       this.__props__[attrName] = value;
     }
   };
-  GenericComponent.prototype.__render__ = function () {
+  GenericComponent.prototype.__componentRender__ = function () {
     if (this.__is_attached__ === false) {return;}
     this.__virtualDom__.render();
   };
@@ -154,36 +154,19 @@ function WebBlock(data) {
     }
   }
 
+  var specialNames = ['createdCallback','attributeChangedCallback','attachedCallback','detachedCallback','style','render','attributes','mixins']
   for (var i in data) {
-    if (i === 'createdCallback') {
-      GenericComponent.prototype.__createdCallback__ = data[i];
-      continue;
-    }
-    if (i === 'attributeChangedCallback') {
-      GenericComponent.prototype.__attributeChangedCallback__ = data[i];
-      continue;
-    }
-    if (i === 'attachedCallback') {
-      GenericComponent.prototype.__attachedCallback__ = data[i];
-      continue;
-    }
-    if (i === 'detachedCallback') {
-      GenericComponent.prototype.__detachedCallback__ = data[i];
-      continue;
-    }
-    if (i === 'style') {
-      GenericComponent.prototype.__style__ = data[i];
-      continue;
-    }
-    if (i === 'render') {
-      GenericComponent.prototype.__componentRender__ = data[i];
-      continue;
-    }
-    if (i === 'attributes') {
-      GenericComponent.prototype.__attributeDefinitions__ = data[i];
+    if (specialNames.indexOf(i)!=-1) {
+      GenericComponent.prototype["__"+i+"__"] = data[i];
       continue;
     }
     GenericComponent.prototype[i] = data[i];
+  }
+  for (var i in GenericComponent.prototype.__mixins__) {
+    var mixin = GenericComponent.prototype.__mixins__[i];
+    for(var j in mixin){
+      GenericComponent.prototype[j] = mixin[j];
+    }
   }
   document.registerElement(data.tag, GenericComponent);
   return GenericComponent;
@@ -196,7 +179,7 @@ WebBlock.React = function(webComponent){
       webComponent.__injectStyles__();
     },
     render: function () {
-      return webComponent.__componentRender__.call(webComponent, this);
+      return webComponent.__render__.call(webComponent, this);
     }
   });
 }
@@ -212,13 +195,13 @@ WebBlock.VirtualDom = function(webComponent){
 }
 WebBlock.VirtualDom.prototype.render = function(){
   if(this.tree===undefined){
-    this.tree = this.webComponent.__componentRender__.call(this.webComponent);
+    this.tree = this.webComponent.__render__.call(this.webComponent);
     this.rootNode = virtualDom.create(this.tree);
     this.webComponent.shadowRoot.appendChild(this.rootNode);
     this.webComponent.__injectStyles__();
   }
   else {
-    var newTree = this.webComponent.__componentRender__.call(this.webComponent);
+    var newTree = this.webComponent.__render__.call(this.webComponent);
     var patches = virtualDom.diff(this.tree, newTree);
     this.rootNode = virtualDom.patch(this.rootNode, patches);
     this.tree = newTree;
@@ -233,7 +216,7 @@ WebBlock.Default = function(webComponent){
 WebBlock.Default.prototype.render = function(){
   this.webComponent.shadowRoot.innerHTML = "";
 
-  var result = this.webComponent.__componentRender__.call(this.webComponent);
+  var result = this.webComponent.__render__.call(this.webComponent);
   if(typeof result == "string"){
     this.webComponent.shadowRoot.innerHTML = result;
   }

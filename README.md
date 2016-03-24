@@ -201,6 +201,34 @@ WebBlock({
 ```html
 <my-greeting>Sam</my-greeting>
 ```
+##Mixin support
+```jsx
+var ActionMixin = {
+  action: function(type){
+    var event = document.createEvent('Event');
+    event.initEvent('action', true, true);
+    event.details = type;
+    this.dispatchEvent(event);
+  }
+}
+
+WebBlock({
+  tag: 'todo-list',
+  mixins: [ActionMixin],
+  render: function () {
+    var _this = this;
+    var el = document.createElement("div");
+    el.innerHTML = "<button>Send Action</button>"
+    el.querySelector("button").addEventListener("click",function(){
+      _this.action("boom!")
+    })
+    return el;
+  }
+});
+document.addEventListener("action",function(e){
+  console.log(e);
+})
+```
 
 #Choose Your Own Virtual Dom
 By default web component uses no virtual dom. But you can choose between React and virtual-dom enabled web components.

@@ -1,15 +1,32 @@
-<html>
-<head>
-  <script src="./lib/webcomponents.min.js" async></script>
-  <link rel="import" href="./test-component.html" async>
-</head>
-<body>
-  <my-greeting id="greet" name="Sam"></my-greeting>
-  <div class="name">i'm not blue</div>
-  <script>
-  setTimeout(function(){
-    document.getElementById("greet").name = "Ryan";
-  },4000)
-  </script>
-</body>
-</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.min.js"></script>
+<link rel="import" href="./webblock.html">
+<todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
+<script>
+var ActionMixin = {
+  action: function(type){
+    var event = document.createEvent('Event');
+    event.initEvent('action', true, true);
+    event.details = type;
+    this.dispatchEvent(event);
+  }
+}
+
+WebBlock({
+  tag: 'todo-list',
+  mixins: [ActionMixin],
+  render: function () {
+    var _this = this;
+    var el = document.createElement("div");
+    el.innerHTML = "<button>Send Action</button>"
+    el.querySelector("button").addEventListener("click",function(){
+      _this.action("boom!")
+    })
+    return el;
+  }
+});
+document.addEventListener("action",function(e){
+  console.log(e);
+})
+</script>

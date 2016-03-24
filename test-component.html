@@ -7,7 +7,7 @@ WebBlock({
   style: ".name { color: blue}",
   render: function(){
     var h = virtualDom.h;
-    return h('div',{className:"name"},["Hello "+this.name+"!"]);
+    return h('div',{className:"name", onClick:function(){alert("what")}},["Hello "+this.name+"!"]);
   },
   attributes: {
     name:String
