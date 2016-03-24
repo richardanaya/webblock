@@ -76,7 +76,7 @@ Attribute string conversion, while useful, can be very slow. For every attribute
 WebBlock({
   tag: "my-greeting",
   render: function(){
-    if(!this.name) return "<div>Hello World!</div>""
+    if(!this.name) return "<div>Hello World!</div>"
     return "<div>Hello "+this.name.first+"</div>";
   },
   attributes: {
@@ -174,6 +174,7 @@ WebBlock({
 ```
 
 #Choose Your Own Virtual Dom
+By default web component uses no virtual dom. But you can choose between React and virtual-dom enabled web components.
 ##All the power of JSX
 ```jsx
 WebBlock({
