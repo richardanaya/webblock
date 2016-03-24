@@ -325,6 +325,21 @@ WebBlock({
 ```
 [Checkout a working example on CodePen](http://codepen.io/ranaya/pen/WwpNxx?editors=1010)
 
+#All the power of Polymer
+Polymer has a great collection of web components to use, by default they use what is called "shady dom" which is not compatible with ShadowDOM. To force polymer to use ShadowDOM (which will one day become the default!), use this block of code before Polymer is loaded on your page:
+
+```jsx
+<script>
+    /* this script must run before Polymer is imported */
+    window.Polymer = {
+      dom: 'shadow',
+      lazyRegister: true
+    };
+</script>
+```
+
+Look for new components at https://customelements.io/
+
 #Quickstart
 
 ```html
