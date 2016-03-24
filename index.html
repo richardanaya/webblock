@@ -11,7 +11,7 @@
       document.getElementById("greet").name = {first:"John",last:"Smith"};
       setTimeout(function(){
         document.getElementById("greet").name = {first:"Red",last:"Smith"};
-
+        document.getElementById("greet").name = document.getElementById("greet").name;
       },4000)
     });
   </script>

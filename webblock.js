@@ -25,11 +25,15 @@ function WebBlock(data) {
       Object.defineProperty(this, propName, {
         set: function (x) {
           var oldValue = this.__props__[propName];
-          this.__props__[propName] = x;
-          this.__prop_observers__[propName].forEach(function(handler){
-            handler(x,oldValue,propName)
-          })
-          this.__render__();
+          var dirty = oldValue!=x;
+          debugger;
+          if(dirty){
+            this.__props__[propName] = x;
+            this.__prop_observers__[propName].forEach(function(handler){
+              handler(x,oldValue,propName)
+            })
+            this.__render__();
+          }
         },
         get: function () {
           return this.__props__[propName];
@@ -205,7 +209,6 @@ WebBlock.React = function(webComponent){
     componentDidMount: function(){
       webComponent.__injectStyles__();
     },
-    mixins: [React.addons.PureRenderMixin],
     render: function () {
       return webComponent.__componentRender__.call(webComponent, this);
     }
@@ -223,7 +226,14 @@ WebBlock.Default = function(webComponent){
   this.webComponent = webComponent;
 }
 WebBlock.Default.prototype.render = function(){
-  this.webComponent.shadowRoot.innerHTML = this.webComponent.__componentRender__.call(this.webComponent)
+  this.webComponent.shadowRoot.innerHTML = "";
+  var result = this.webComponent.__componentRender__.call(this.webComponent);
+  if(typeof result == "string"){
+    this.webComponent.shadowRoot.innerHTML
+  }
+  else {
+    this.webComponent.shadowRoot.appendChild(result);
+  }
   this.webComponent.__injectStyles__();
 }
 WebBlock.Default.prototype.detach = function(){
