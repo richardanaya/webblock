@@ -26,7 +26,6 @@ function WebBlock(data) {
         set: function (x) {
           var oldValue = this.__props__[propName];
           var dirty = oldValue!=x;
-          debugger;
           if(dirty){
             this.__props__[propName] = x;
             this.__prop_observers__[propName].forEach(function(handler){
