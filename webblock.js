@@ -177,44 +177,53 @@
     return GenericComponent;
   }
 
-  WebBlock.React = function (webComponent) {
-    this.webComponent = webComponent;
-    this.reactComponent = React.createClass({
-      componentDidMount: function () {
-        webComponent.__injectStyles__();
-      },
-      render: function () {
-        return webComponent.__render__.call(webComponent, this);
+  WebBlock.React = function(LocalReact,LocalReactDOM){
+    LocalReact = LocalReactDOM||React;
+    LocalReactDOM = LocalReactDOM||ReactDOM;
+    var virtualDomClass = function (webComponent) {
+      this.webComponent = webComponent;
+      this.reactComponent = LocalReact.createClass({
+        componentDidMount: function () {
+          webComponent.__injectStyles__();
+        },
+        render: function () {
+          return webComponent.__render__.call(webComponent, this);
+        }
+      });
+    };
+    virtualDomClass.prototype.render = function () {
+      var el = LocalReact.createElement(this.reactComponent, this.webComponent.__props__);
+      LocalReactDOM.render(el, this.webComponent.shadowRoot);
+    };
+    virtualDomClass.prototype.detach = function () {
+      LocalReactDOM.unmountComponentAtNode(this.webComponent.shadowRoot);
+    };
+    return virtualDomClass;
+  }
+  WebBlock.VirtualDom = function(LocalVirtualDom){
+    LocalVirtualDom = LocalVirtualDom||virtualDom
+    var virtualDomClass = function (webComponent) {
+      this.webComponent = webComponent;
+    };
+    virtualDomClass.prototype.render = function () {
+      if (this.tree === undefined) {
+        this.tree = this.webComponent.__render__.call(this.webComponent);
+        this.rootNode = LocalVirtualDom.create(this.tree);
+        this.webComponent.shadowRoot.appendChild(this.rootNode);
+        this.webComponent.__injectStyles__();
       }
-    });
-  };
-  WebBlock.React.prototype.render = function () {
-    var el = React.createElement(this.reactComponent, this.webComponent.__props__);
-    ReactDOM.render(el, this.webComponent.shadowRoot);
-  };
-  WebBlock.React.prototype.detach = function () {
-    ReactDOM.unmountComponentAtNode(this.webComponent.shadowRoot);
-  };
-  WebBlock.VirtualDom = function (webComponent) {
-    this.webComponent = webComponent;
-  };
-  WebBlock.VirtualDom.prototype.render = function () {
-    if (this.tree === undefined) {
-      this.tree = this.webComponent.__render__.call(this.webComponent);
-      this.rootNode = virtualDom.create(this.tree);
-      this.webComponent.shadowRoot.appendChild(this.rootNode);
-      this.webComponent.__injectStyles__();
-    }
-    else {
-      var newTree = this.webComponent.__render__.call(this.webComponent);
-      var patches = virtualDom.diff(this.tree, newTree);
-      this.rootNode = virtualDom.patch(this.rootNode, patches);
-      this.tree = newTree;
-    }
-  };
-  WebBlock.VirtualDom.prototype.detach = function () {
+      else {
+        var newTree = this.webComponent.__render__.call(this.webComponent);
+        var patches = LocalVirtualDom.diff(this.tree, newTree);
+        this.rootNode = LocalVirtualDom.patch(this.rootNode, patches);
+        this.tree = newTree;
+      }
+    };
+    virtualDomClass.prototype.detach = function () {
 
-  };
+    };
+    return virtualDomClass;
+  }
   WebBlock.Default = function (webComponent) {
     this.webComponent = webComponent;
   };
