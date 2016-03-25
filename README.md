@@ -240,9 +240,11 @@ We can return JSX as our render and WebBlock will neatly merge it into our virtu
 If you have child web components. Use JSX's ref ( https://facebook.github.io/react/docs/more-about-refs.html ) to get access to the node when it's mounted. This is very useful for storing references to inputs and accessing the direct properties/functions of our child web components.
 
 ```jsx
+var React = require("React");
+var ReactDOM = require("ReactDOM");
 WebBlock({
   tag: "my-greeting",
-  virtualDom: WebBlock.React,
+  virtualDom: WebBlock.React(React,ReactDOM),
   render: function(){
     return <div>Hello {this.name.first}</div>
   },
@@ -253,7 +255,7 @@ WebBlock({
 
 WebBlock({
   tag: "my-greeting-list",
-  virtualDom: WebBlock.React,
+  virtualDom: WebBlock.React(React,ReactDOM),
   render: function(){
     debugger;
     if(this.names==undefined)return <div></div>
@@ -278,12 +280,13 @@ WebBlock({
 ##All the power of virtual-dom
 This is an extremely minimalistic virtual-dom project.
 ```jsx
+var vdom = require("virtual-dom");
 WebBlock({
   tag: "my-greeting",
-  virtualDom: WebBlock.VirtualDom,
+  virtualDom: WebBlock.VirtualDom(vdom),
   style: ".name { color: blue}",
   render: function(){
-    return h('div',{className:"name"},["Hello "+this.name+"!"]);
+    return vdom.h('div',{className:"name"},["Hello "+this.name+"!"]);
   },
   attributes: {
     name:String
@@ -366,7 +369,7 @@ Let's look at how we'd make todo
 ```jsx
 WebBlock({
   tag: 'todo-item',
-  virtualDom: WebBlock.React,
+  virtualDom: WebBlock.React(React,ReactDOM),
   render: function () {
     var divStyle = {};
     if (this.complete) {
@@ -394,7 +397,7 @@ WebBlock({
 
 WebBlock({
   tag: 'todo-list',
-  virtualDom: WebBlock.React,
+  virtualDom: WebBlock.React(React,ReactDOM),
   render: function () {
     var children = this.tasks.map(function (x) {
       return <todo-item task={x} />;
@@ -413,6 +416,16 @@ WebBlock({
 <todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
 ```
 [Checkout a working example on CodePen](http://codepen.io/ranaya/pen/WwpNxx?editors=1010)
+
+#Import HTML
+If you need to import other html simply:
+```javascript
+WebBlock.import([http://www.test.com/componentA.html,http://www.test.com/componentB.html],function(){
+  console.log("loaded all components");
+}, function(err){
+  console.log("there was an error");
+})
+```
 
 #Flux/Redux
 Let's look how we can use popular unidirection data architecture with web components made with web block:

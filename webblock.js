@@ -242,6 +242,27 @@
   WebBlock.Default.prototype.detach = function () {
 
   };
+  WebBlock.import = function(items,success,error){
+    var loadedCount = 0;
+    function complete(){
+      loadedCount++;
+      if(loadedCount === items.length){
+        success();
+      }
+    }
+    for(var i = 0 ; i < items.length; i++){
+      var link = document.createElement('link');
+      link.rel = 'import';
+      link.href = items[i];
+      if(success) {
+        link.onload = complete;
+      }
+      if(error) {
+        link.onerror = error;
+      }
+      document.head.appendChild(link);
+    }
+  }
   window.WebBlock = module.exports = WebBlock;
 })(
   typeof window !== 'undefined' ? window : {},
