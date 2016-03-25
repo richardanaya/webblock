@@ -3,13 +3,12 @@
 // license : MIT
 
 (function (window, module) {
-
   function WebBlock(data) {
     var isFunction = function (functionToCheck) {
       var getType = {};
       return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
     };
-    var virtualDomClass = data.virtualDom||WebBlock.Default;
+    var virtualDomClass = data.virtualDom || WebBlock.Default;
     var GenericComponent = function () {};
     GenericComponent.prototype = Object.create(HTMLElement.prototype);
     GenericComponent.prototype.createdCallback = function () {
@@ -31,12 +30,12 @@
         Object.defineProperty(this, propName, {
           set: function (x) {
             var oldValue = this.__props__[propName];
-            var dirty = oldValue!=x;
-            if(dirty){
+            var dirty = oldValue != x;
+            if (dirty) {
               this.__props__[propName] = x;
-              this.__prop_observers__[propName].forEach(function(handler){
-                handler(x,oldValue,propName)
-              })
+              this.__prop_observers__[propName].forEach(function (handler) {
+                handler(x, oldValue, propName);
+              });
               this.__componentRender__();
             }
           },
@@ -51,14 +50,14 @@
           var def = this.__attributes__[i];
           var attrValue = this.getAttribute(i);
           if (typeof def === 'object' && attrValue === null && def.defaultValue !== undefined) {
-            if(this[i]!=undefined){
+            if (this[i] != undefined) {
               this.__props__[i] = this[i];
             }
             else {
               this.__props__[i] = def.defaultValue;
             }
           } else {
-            if(this[i]!=undefined){
+            if (this[i] != undefined) {
               this.__props__[i] = this[i];
             }
             else {
@@ -73,13 +72,13 @@
         this.__createdCallback__.apply(this, arguments);
       }
     };
-    GenericComponent.prototype.observe = function (name,fn) {
+    GenericComponent.prototype.observe = function (name, fn) {
       this.__prop_observers__[name].push(fn);
-    }
-    GenericComponent.prototype.unobserve = function (name,fn) {
+    };
+    GenericComponent.prototype.unobserve = function (name, fn) {
       var index = this.__prop_observers__[name].indexOf(fn);
       this.__prop_observers__[name].splice(index, 1);
-    }
+    };
     GenericComponent.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
       if (this.__attributes__[attrName] === undefined) {
         return;
@@ -139,38 +138,38 @@
       if (this.__is_attached__ === false) {return;}
       this.__virtualDom__.render();
     };
-    GenericComponent.prototype.__injectStyles__ = function(){
+    GenericComponent.prototype.__injectStyles__ = function () {
       var existingStyles = this.shadowRoot.querySelectorAll('style');
-      for(var l = 0; l<existingStyles.length;l++){
+      for (var l = 0; l < existingStyles.length; l++) {
         existingStyles[l].remove();
       }
-      //create style
-      if(typeof this.__style__ == "string"){
+      // create style
+      if (typeof this.__style__ == 'string') {
         var el = document.createElement('style');
         el.innerHTML = this.__style__;
         this.shadowRoot.appendChild(el);
       }
-      else if(Array.isArray(this.__style__)){
-        for(var k in this.__style__){
+      else if (Array.isArray(this.__style__)) {
+        for (var k in this.__style__) {
           var cssURL = this.__style__[k];
           var el = document.createElement('style');
           el.innerHTML = '@import "' + cssURL + '"';
           this.shadowRoot.appendChild(el);
         }
       }
-    }
+    };
 
-    var specialNames = ['createdCallback','attributeChangedCallback','attachedCallback','detachedCallback','style','render','attributes','mixins']
+    var specialNames = ['createdCallback', 'attributeChangedCallback', 'attachedCallback', 'detachedCallback', 'style', 'render', 'attributes', 'mixins'];
     for (var i in data) {
-      if (specialNames.indexOf(i)!=-1) {
-        GenericComponent.prototype["__"+i+"__"] = data[i];
+      if (specialNames.indexOf(i) != -1) {
+        GenericComponent.prototype["__" + i+'__'] = data[i];
         continue;
       }
       GenericComponent.prototype[i] = data[i];
     }
     for (var i in GenericComponent.prototype.__mixins__) {
       var mixin = GenericComponent.prototype.__mixins__[i];
-      for(var j in mixin){
+      for (var j in mixin) {
         GenericComponent.prototype[j] = mixin[j];
       }
     }
@@ -178,29 +177,29 @@
     return GenericComponent;
   }
 
-  WebBlock.React = function(webComponent){
+  WebBlock.React = function (webComponent) {
     this.webComponent = webComponent;
     this.reactComponent = React.createClass({
-      componentDidMount: function(){
+      componentDidMount: function () {
         webComponent.__injectStyles__();
       },
       render: function () {
         return webComponent.__render__.call(webComponent, this);
       }
     });
-  }
-  WebBlock.React.prototype.render = function(){
+  };
+  WebBlock.React.prototype.render = function () {
     var el = React.createElement(this.reactComponent, this.webComponent.__props__);
     ReactDOM.render(el, this.webComponent.shadowRoot);
-  }
-  WebBlock.React.prototype.detach = function(){
+  };
+  WebBlock.React.prototype.detach = function () {
     ReactDOM.unmountComponentAtNode(this.webComponent.shadowRoot);
-  }
-  WebBlock.VirtualDom = function(webComponent){
+  };
+  WebBlock.VirtualDom = function (webComponent) {
     this.webComponent = webComponent;
-  }
-  WebBlock.VirtualDom.prototype.render = function(){
-    if(this.tree===undefined){
+  };
+  WebBlock.VirtualDom.prototype.render = function () {
+    if (this.tree === undefined) {
       this.tree = this.webComponent.__render__.call(this.webComponent);
       this.rootNode = virtualDom.create(this.tree);
       this.webComponent.shadowRoot.appendChild(this.rootNode);
@@ -212,30 +211,30 @@
       this.rootNode = virtualDom.patch(this.rootNode, patches);
       this.tree = newTree;
     }
-  }
-  WebBlock.VirtualDom.prototype.detach = function(){
+  };
+  WebBlock.VirtualDom.prototype.detach = function () {
 
-  }
-  WebBlock.Default = function(webComponent){
+  };
+  WebBlock.Default = function (webComponent) {
     this.webComponent = webComponent;
-  }
-  WebBlock.Default.prototype.render = function(){
-    this.webComponent.shadowRoot.innerHTML = "";
+  };
+  WebBlock.Default.prototype.render = function () {
+    this.webComponent.shadowRoot.innerHTML = '';
 
     var result = this.webComponent.__render__.call(this.webComponent);
-    if(typeof result == "string"){
+    if (typeof result == 'string') {
       this.webComponent.shadowRoot.innerHTML = result;
     }
     else {
       this.webComponent.shadowRoot.appendChild(result);
     }
     this.webComponent.__injectStyles__();
-  }
-  WebBlock.Default.prototype.detach = function(){
+  };
+  WebBlock.Default.prototype.detach = function () {
 
-  }
+  };
   window.WebBlock = module.exports = WebBlock;
 })(
-  typeof window !== "undefined" ? window : {},
-  typeof module !== "undefined" ? module : {}
+  typeof window !== 'undefined' ? window : {},
+  typeof module !== 'undefined' ? module : {}
 );
