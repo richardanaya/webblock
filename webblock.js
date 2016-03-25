@@ -178,7 +178,7 @@
   }
 
   WebBlock.React = function(LocalReact,LocalReactDOM){
-    LocalReact = LocalReactDOM||React;
+    LocalReact = LocalReact||React;
     LocalReactDOM = LocalReactDOM||ReactDOM;
     var virtualDomClass = function (webComponent) {
       this.webComponent = webComponent;
