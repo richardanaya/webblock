@@ -432,4 +432,5 @@ WebBlock can be used totally with HTMLImports, but many people use a webpack wor
 http://www.webpackbin.com/N1iTaJ1Cl
 
 #Flux/Redux
-Let's look how we can use popular unidirection data architecture with web components made with web block:
+Let's look how we can use popular unidirection data architecture with web components made with web block. Take a look at this example that uses redux:
+http://www.webpackbin.com/E1D11e1Ce
