@@ -1,6 +1,6 @@
 {
   "name": "webblock",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Make efficient and expressive web components with react",
   "main": "webblock.js",
   "scripts": {

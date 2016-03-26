@@ -263,6 +263,32 @@
       document.head.appendChild(link);
     }
   }
+  WebBlock.ActionMixin = {
+    action(type,data){
+      var event = document.createEvent('Event');
+      event.initEvent('action', true, true);
+      event.detail = {type:type,data:data};
+      this.dispatchEvent(event);
+    }
+  }
+  WebBlock.ReactMixin = {
+    setPropertyOnRef: function(propName,value){
+      return function(ref){
+        ref[propName] = value;
+      }
+    },
+    observePropertyOnRef: function(propName,handler){
+      return function(ref){
+        ref.observe(propName,handler);
+      }
+    },
+    setPropertyToRef: function(propName){
+      var _this = this;
+      return function(ref){
+        _this[propName] = ref;
+      }
+    }
+  }
   window.WebBlock = module.exports = WebBlock;
 })(
   typeof window !== 'undefined' ? window : {},
