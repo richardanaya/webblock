@@ -427,5 +427,9 @@ WebBlock.import([http://www.test.com/componentA.html,http://www.test.com/compone
 })
 ```
 
+#Using with WebPack
+WebBlock can be used totally with HTMLImports, but many people use a webpack work flow. It's very easy to integrate in, check out this full example:
+http://www.webpackbin.com/N1iTaJ1Cl
+
 #Flux/Redux
 Let's look how we can use popular unidirection data architecture with web components made with web block:
