@@ -240,8 +240,8 @@ We can return JSX as our render and WebBlock will neatly merge it into our virtu
 If you have child web components. Use JSX's ref ( https://facebook.github.io/react/docs/more-about-refs.html ) to get access to the node when it's mounted. This is very useful for storing references to inputs and accessing the direct properties/functions of our child web components.
 
 ```jsx
-var React = require("React");
-var ReactDOM = require("ReactDOM");
+var React = require("react");
+var ReactDOM = require("react-dom");
 WebBlock({
   tag: "my-greeting",
   virtualDom: WebBlock.React(React,ReactDOM),
