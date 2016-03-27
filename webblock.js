@@ -264,7 +264,7 @@
     }
   }
   WebBlock.ActionMixin = {
-    action(type,data){
+    action: function(type,data){
       var event = document.createEvent('Event');
       event.initEvent('action', true, true);
       event.detail = {type:type,data:data};
