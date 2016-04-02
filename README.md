@@ -8,7 +8,7 @@ Create expressive and powerful web components with virtual dom
 
 * Has a steep learning curve
 * Lacks concise ways to write expressions
-* Tries to re-implement virtual dom when other suitable ones exist
+* Tries to re-implement it's own way of "how do I update my dom nodes quickly" (virtual dom) when other more popular and suitable ways exist
 
 This library allows you to get started with web components quickly and reuse popular virtual dom technologies like React.
 
