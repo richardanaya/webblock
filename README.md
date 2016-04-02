@@ -420,7 +420,7 @@ WebBlock({
 #Import HTML
 If you need to import other html simply:
 ```javascript
-WebBlock.import([http://www.test.com/componentA.html,http://www.test.com/componentB.html],function(){
+WebBlock.import(['http://www.test.com/componentA.html,http://www.test.com/componentB.html'],function(){
   console.log("loaded all components");
 }, function(err){
   console.log("there was an error");
