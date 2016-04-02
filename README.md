@@ -2,6 +2,16 @@
 
 Create expressive and powerful web components with virtual dom
 
+##Why should I look this library?
+
+[Web components](https://css-tricks.com/modular-future-web-components/) are a very powerful way to modularize your UI in a way that is standards compliant and familiar to people who know HTML. The problem is, the leading library for making web components - Polymer JS:
+
+* Has a steep learning curve
+* Lacks concise ways to write expressions
+* Tries to re-implement virtual dom when other suitable ones exist
+
+This library allows you to get started with web components quickly and reuse popular virtual dom technologies like React.
+
 ## Simple Web Component Definition
 By default you can use string or HTMLElement. Look down below for how to use your virtual dom technology of choice.
 ```jsx
