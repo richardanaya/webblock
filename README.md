@@ -34,7 +34,7 @@ WebBlock({
 });
 ```
 ```html
-<my-greeting/>
+<my-greeting></my-greeting>
 ```
 ## Attributes
 Define attributes that give your web component data from outside world
@@ -51,7 +51,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting name="John"/>
+<my-greeting name="John"></my-greeting>
 ```
 
 ## Built-In Attribute Converters
@@ -89,7 +89,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting name='John:Smith'/>
+<my-greeting name='John:Smith'></my-greeting>
 ```
 
 ##Typed Attribute Property Access
@@ -110,7 +110,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting id="greet"/>
+<my-greeting id="greet"></my-greeting>
 ```
 ```javascript
 document.getElementById("greet").name = {first:"John",last:"Smith"};
@@ -131,7 +131,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting id="greet"/>
+<my-greeting id="greet"></my-greeting>
 ```
 ```javascript
 var element = document.getElementById("greet");
@@ -166,7 +166,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting/>
+<my-greeting></my-greeting>
 ```
 
 ## ShadowDOM and Styling
@@ -191,7 +191,7 @@ WebBlock({
 });
 ```
 ```html
-<my-greeting/>
+<my-greeting></my-greeting>
 <div class="greeting">I won't be green because i'm not in the web component</div>
 ```
 ##Access the original content of the Web Component
@@ -240,7 +240,7 @@ document.addEventListener("action",function(e){
 })
 ```
 ```html
-<my-greeting/>
+<my-greeting></my-greeting>
 ```
 #Choose Your Own Virtual Dom
 By default web component uses no virtual dom. But you can choose between React and virtual-dom enabled web components.
@@ -285,7 +285,7 @@ WebBlock({
 
 ```
 ```html
-<my-greeting-list names='[{"first":"John","last":"Smith"},{"first":"Justin","last":"Smith"}]'/>
+<my-greeting-list names='[{"first":"John","last":"Smith"},{"first":"Justin","last":"Smith"}]'></my-greeting>
 ```
 ##All the power of virtual-dom
 This is an extremely minimalistic virtual-dom project.
@@ -304,7 +304,7 @@ WebBlock({
 });
 ```
 ```html
-<my-greeting names="Sam"/>
+<my-greeting names="Sam"></my-greeting>
 ```
 
 #All the power of Polymer
@@ -371,7 +371,7 @@ WebBlock({
   }
 });
 </script>
-<hello-world/>
+<hello-world></hello-world>
 ```
 
 #Todo
@@ -423,7 +423,7 @@ WebBlock({
 });
 ```
 ```html
-<todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'/>
+<todo-list tasks='["Throw Out Trash","Write Code","Cook Dinner"]'></todo-list>
 ```
 [Checkout a working example on CodePen](http://codepen.io/ranaya/pen/WwpNxx?editors=1010)
 
