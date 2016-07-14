@@ -102,9 +102,7 @@ WebBlock({
     return "<div>Hello "+this.name.first+"</div>";
   },
   attributes: {
-    name: function(val){
-      return val.split(":");
-    }
+    name: Object
   }
 });
 
@@ -216,7 +214,7 @@ WebBlock({
 var ActionMixin = {
   action: function(type){
     var event = document.createEvent('Event');
-    event.initEvent('action's, true, true);
+    event.initEvent('action', true, true);
     event.details = type;
     this.dispatchEvent(event);
   }
